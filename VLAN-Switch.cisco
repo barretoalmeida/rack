@@ -1,0 +1,108 @@
+!VLAN número: 0 ate 4095
+!VLAN não pode usar:0 1
+!VLAN criar: pode 1 até 1001 
+enable 
+    configure terminal 
+        vlan 10 
+            name FIN
+            vlan 20
+            name EST 
+            vlan 30
+            name FAT 
+            vlan 40
+            name GER 
+            vlan 50
+            name SERVER 
+            vlan 60 
+            name WIFI
+            vlan 99
+            name SVI
+            end
+write 
+show vlan brief
+-----------------------------------
+!configuraçao das SVI nos switches
+enable 
+    configure terminal
+        interface vlan 99
+        description Interface de SVI 
+        ip address 172.16.0.97 255.255.255.224
+        no shutdown
+        end 
+write
+show running-config
+show ip interface brief
+---------------------------------
+!configuração da VLAN dos servidores (so no primeiro)
+enable 
+    configure terminal 
+        interface range gigabitEthernet 1/0/10 - 19
+            description VLAN 50 dos Servidores 
+            switchport mode access 
+            switchport nonegotiate 
+            switchport access vlan 50
+            end
+write
+show running-config
+show vlan brief
+---------------------------------------------
+!configuração da VLAN na rede sem fio
+enable 
+    configure terminal 
+        interface range GigabitEthernet 1/0/20 - 23
+            description VLAN 60 dos Access Point
+            switchport mode access 
+            switchport nonegotiate
+            switchport access vlan 60
+            end
+wride
+show running-config
+show vlan brief
+--------------------------------------------
+!configuração da VLAN na rede sem fio (desligar)
+enable
+    configure terminal
+        interface range gigabitEthernet 1/0/5 - 9, gigabitEthernet 1/0/14 - 19, gigabitEthernet 1/0/21 - 23, gigabitEthernet 1/1/1 - 4
+        description interfaces desligadas 
+        shutdown
+        ende
+wride 
+show running-configure 
+show ip interface brief (para ver se esta desligadas as portas)
+-------------------------------------------------------------------------
+  !Configuração do Switch 2960 (lado esquedo e lado direito)
+enable  
+    configure terminal
+        interface range FastEthernet 0/1 - 4
+        description VLAN 10 Financeiro 
+        switchport mode access
+        switchport nonegotiate 
+        switchport access vlan 10
+        exit
+    interface range FastEthernet 0/5 - 9 (estou nessa 2 switch)
+        description VLAN 20 Estoque 
+        switchport mode access
+        switchport nonegotiate 
+        switchport access vlan 20
+    exit
+    interface rnage FastEthernet 0/10 - 14
+        description VLAN 30 Faturamento 
+        switchport mode access
+        switchport nonegotiate 
+        switchport access vlan 30
+        exit
+    interface range FastEthernet 0/15 - 20
+        description VLAN 40 Gerencia 
+        switchport mode access
+        switchport nonegotiate 
+        switchport access vlan 40
+        exit
+        interface range FastEthernet 0/2 - 4, FastEthernet 0/6 - 9, FastEthernet 0/11 - 14, FastEthernet 0/16 - 22
+            shutdown
+            exit
+    wride 
+    show running-config
+    
+    show vlan brief
+    show vlan id 10
+    show vlan name FIN
