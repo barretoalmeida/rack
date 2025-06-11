@@ -1,0 +1,10 @@
+!Configuração do DHCP Server no Router Cisco 2911
+
+ip dhcp excluded-address 172.16.11.1 172.16.11.100
+    ip dhcp excluded-address 172.16.11.200 172.16.11.254
+    ip dhcp pool vlan-11
+      network 172.16.11.0 255.255.255.0
+      default-router 172.16.11.254
+      dns-server 8.8.8.8 8.8.4.4
+      domain-name senac.br
+      exit
